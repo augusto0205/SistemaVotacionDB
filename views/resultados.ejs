@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados de Votación</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body class="bg-dark text-white">
     <div class="container mt-5">
@@ -12,7 +12,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <% 
-                // Calcular total de votos
+                // Calcular total de votos//
                 const totalVotos = opciones.reduce((sum, opcion) => sum + opcion.votos, 0);
                 %>
                 <% opciones.forEach(opcion => { %>
@@ -28,6 +28,7 @@
                         <div class="progress mt-2" style="height: 25px;">
                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
                                  role="progressbar" 
+                                 style="width: <%= porcentaje %>%"
                                  aria-valuenow="<%= porcentaje %>"
                                  aria-valuemin="0"
                                  aria-valuemax="100">

@@ -1,17 +1,5 @@
 const opcionesController = {};
-
-opcionesController.mostrarOpciones = (req, res) => {
-    res.send('Página de inicio: Aquí se verán las opciones para votar');
-};
-
-opcionesController.votar = (req, res) => {
-    res.send('Voto procesado (Simulación)');
-};
-
-opcionesController.mostrarResultados = (req, res) => {
-    res.send('Página de resultados: Aquí se verán los votos totales');
-};
-const Votacion = require('../models/Votacion'); // Importas el modelo de image_2d931a.png
+const Votacion = require('../models/Votacion');
 
 
 
@@ -31,11 +19,16 @@ opcionesController.mostrarOpciones = async (req, res) => {
 opcionesController.votar = async (req, res) => {
     const { id } = req.params;
     try {
+        console.log(`🗳️ Intentando incrementar voto para ID: ${id}`);
         // Aprovechamos el método estático que ya creaste en Votacion.js
-        await Votacion.incrementarVotoPorId(id); 
-        res.redirect('/resultados'); 
+        const resultado = await Votacion.incrementarVotoPorId(id);
+        console.log(`✅ Voto guardado exitosamente en MongoDB Atlas`);
+        console.log(`   Título: ${resultado.titulo}`);
+        console.log(`   Votos totales: ${resultado.votos}`);
+        console.log(`   Categoría: ${resultado.categoria}`);
+        res.redirect('/resultados');
     } catch (error) {
-        console.error("Error al votar:", error);
+        console.error("❌ Error al votar:", error);
         res.status(404).send("No se pudo registrar el voto");
     }
 };
@@ -43,11 +36,16 @@ opcionesController.votar = async (req, res) => {
 // 3. Mostrar Resultados (mostrarResultados)
 opcionesController.mostrarResultados = async (req, res) => {
     try {
+        console.log(`📊 Obteniendo resultados de MongoDB Atlas...`);
         // Traemos las opciones ordenadas por votos de mayor a menor
         const opciones = await Votacion.find().sort({ votos: -1 });
+        console.log(`✅ Resultados recuperados: ${opciones.length} opciones`);
+        opciones.forEach(opcion => {
+            console.log(`   - ${opcion.titulo}: ${opcion.votos} votos`);
+        });
         res.render('resultados', { opciones });
     } catch (error) {
-        console.error("Error al mostrar resultados:", error);
+        console.error("❌ Error al mostrar resultados:", error);
         res.status(500).send("Error en el servidor");
     }
 };

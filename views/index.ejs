@@ -26,11 +26,18 @@
           <p>Haz clic en una opción y envía tu voto.</p>
         </div>
 
-        <form id="votoForm" class="voto-form">
-          <div id="opcionesGrid" class="opciones-grid"></div>
-          <div id="mensajeForm" class="info-text"></div>
-          <button type="submit" class="btn">Votar ahora</button>
-        </form>
+        <div class="opciones-grid">
+    <% opciones.forEach(opcion => { %>
+      <form action="/votar/<%= opcion._id %>" method="POST" class="opcion-form">
+        <button type="submit" class="opcion-card">
+          <div class="opcion-info">
+            <h3><%= opcion.titulo %></h3>
+            <span class="categoria"><%= opcion.categoria %></span>
+          </div>
+        </button>
+      </form>
+    <% }) %>
+  </div>
       </section>
     </main>
   </body>
