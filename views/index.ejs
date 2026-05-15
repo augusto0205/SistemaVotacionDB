@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema de Votación</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">🗳️ Elige tu opción</h1>
-        <div class="row justify-content-center">
-            <% opciones.forEach(opcion => { %>
-                <div class="col-md-4 mb-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body text-center">
-                            <h5 class="card-title"><%= opcion.titulo %></h5>
-                            <p class="text-muted small"><%= opcion.categoria %></p>
-                            <!-- El formulario envía el ID a la ruta /votar/:id que definimos -->
-                            <form action="/votar/<%= opcion._id %>" method="POST">
-                                <button type="submit" class="btn btn-primary w-100">Votar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            <% }) %>
+     <link rel="stylesheet" href="style.css" />
+    <script src="s.js" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero-card">
+        <div class="hero-text">
+          <span class="badge">Encuesta en vivo</span>
+          <h1>Tu voto decide la próxima actividad</h1>
+          <p>Selecciona una opción y vota rápido. Los resultados se actualizan al instante.</p>
         </div>
-        <div class="text-center mt-4">
-            <a href="/resultados" class="btn btn-outline-secondary">Ver Resultados Reales</a>
+        <div class="hero-actions">
+          <a class="hero-link" href="resultados.ejs">Ver resultados actuales</a>
         </div>
-    </div>
-</body>
+         </section>
+
+      <section class="card">
+        <div class="section-header">
+          <h2>Elige una opción</h2>
+          <p>Haz clic en una opción y envía tu voto.</p>
+        </div>
+
+        <form id="votoForm" class="voto-form">
+          <div id="opcionesGrid" class="opciones-grid"></div>
+          <div id="mensajeForm" class="info-text"></div>
+          <button type="submit" class="btn">Votar ahora</button>
+        </form>
+      </section>
+    </main>
+  </body>
 </html>
