@@ -9,12 +9,34 @@ const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/votacion_db';
 
 // Conexión a MongoDB
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('=> Conexión exitosa a MongoDB'))
-  .catch(err => {
-    console.error('Error conectando a la base de datos:', err);
+const conectarDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+      bufferCommands: false
+    });
+    console.log("=> Conexión exitosa a MongoDB Atlas");
+  } catch (error) {
+    console.error("❌ Error crítico conectando a MongoDB:");
+    console.error("Mensaje:", error.message);
+    console.error("Tipo:", error.name);
     process.exit(1);
-  });
+  }
+};
+
+// Event listeners para diagnóstico
+mongoose.connection.on('connected', () => {
+  console.log('Mongoose conectado a MongoDB Atlas');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('Error de conexión Mongoose:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose desconectado de MongoDB');
+});
 
 // Middleware
 app.use(cors());
@@ -42,9 +64,14 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
+const iniciarServidor = async () => {
+  await conectarDB();
+  app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
     console.log(`Accede a http://localhost:${PORT}`);
-});
+  });
+};
+
+iniciarServidor();
 
 module.exports = app;

@@ -11,16 +11,28 @@
         <h1 class="text-center mb-5">📊 Resultados Actuales</h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <% 
+                // Calcular total de votos
+                const totalVotos = opciones.reduce((sum, opcion) => sum + opcion.votos, 0);
+                %>
                 <% opciones.forEach(opcion => { %>
+                    <% 
+                    // Calcular porcentaje real
+                    const porcentaje = totalVotos > 0 ? Math.round((opcion.votos / totalVotos) * 100) : 0;
+                    %>
                     <div class="mb-4">
                         <div class="d-flex justify-content-between">
                             <span><%= opcion.titulo %></span>
-                            <span class="badge bg-success"><%= opcion.votos %> votos</span>
+                            <span class="badge bg-success"><%= opcion.votos %> votos (<%= porcentaje %>%)</span>
                         </div>
                         <div class="progress mt-2" style="height: 25px;">
                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
                                  role="progressbar" 
-                                 style="width: <%= (opcion.votos > 0) ? (opcion.votos * 10) : 5 %>%">
+                                 style="width: '<%= porcentaje %>%'"
+                                 aria-valuenow="<%= porcentaje %>"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                <%= porcentaje %>%
                             </div>
                         </div>
                     </div>
